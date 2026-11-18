@@ -1,0 +1,89 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # only used to attach the APK to a release on v* tags
+    defaults:
+      run:
+        working-directory: shieldvpn
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: shieldvpn/core
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk --locked
+
+      - name: Build native core (Rust tests + .so for all ABIs)
+        # ubuntu-latest ships an NDK and exports ANDROID_NDK_HOME
+        run: ./scripts/build-core.sh
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Kotlin unit tests
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
+
+      - name: Build debug APK (installable, debug-signed)
+        run: ./gradlew :app:assembleDebug --no-daemon
+
+      - name: Build signed release APK (only if signing secrets exist)
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then echo "No signing secrets, skipping release build"; exit 0; fi
+          mkdir -p "$RUNNER_TEMP/ks"
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/ks/release.jks"
+          cat > "$RUNNER_TEMP/ks/keystore.properties" <<EOF
+          storeFile=$RUNNER_TEMP/ks/release.jks
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+          SHIELDVPN_KEYSTORE_PROPS="$RUNNER_TEMP/ks/keystore.properties" \
+            ./gradlew :app:assembleRelease --no-daemon
+
+      - name: Collect APKs
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/*.apk dist/ShieldVPN-debug.apk
+          if ls app/build/outputs/apk/release/*.apk >/dev/null 2>&1; then
+            cp app/build/outputs/apk/release/*.apk dist/ShieldVPN-release.apk
+          fi
+          (cd dist && sha256sum *.apk > SHA256SUMS.txt && cat SHA256SUMS.txt)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ShieldVPN-apk
+          path: shieldvpn/dist/
+
+      - name: Attach to GitHub release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: shieldvpn/dist/*
