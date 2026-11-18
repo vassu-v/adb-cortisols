@@ -26,6 +26,10 @@ use std::sync::Mutex;
 pub const MAX_RULES_BYTES: usize = 32 * 1024 * 1024;
 pub const MAX_HOST_BYTES: usize = 255;
 
+/// Page the pretend request comes from; never equals a real host (`.invalid` is reserved).
+const THIRD_PARTY_SOURCE: &str = "https://page.shieldvpn.invalid/";
+const PROBE_TYPES: [&str; 5] = ["script", "xmlhttprequest", "image", "ping", "other"];
+
 struct Handle {
     engine: Engine,
 }
@@ -101,13 +105,14 @@ pub fn should_block(handle: usize, host: &str) -> bool {
         // Only a shared reference is created; Engine is Send + Sync.
         let h = unsafe { &*(handle as *const Handle) };
         let url = format!("https://{}/", host.to_ascii_lowercase());
-        match Request::new(&url, &url, "other", "GET") {
-            Ok(req) => {
-                let r = h.engine.check_network_request(&req);
-                r.should_block()
-            }
+        // A DNS lookup carries no page context, so model it as a request made by some other
+        // site. Without this, every `$third-party` rule (most tracker rules in Brave's and
+        // EasyPrivacy's lists) can never match. Resource type is unknown too, so a host is
+        // blocked if a rule would block it as any common subresource.
+        PROBE_TYPES.iter().any(|t| match Request::new(&url, THIRD_PARTY_SOURCE, t, "GET") {
+            Ok(req) => h.engine.check_network_request(&req).should_block(),
             Err(_) => false,
-        }
+        })
     }))
     .unwrap_or(false)
 }
@@ -206,6 +211,19 @@ mod tests {
         assert!(should_block(h, "tracker.net"));
         assert!(should_block(h, "x.tracker.net"));
         assert!(!should_block(h, "ok.tracker.net"));
+        destroy(h);
+    }
+
+    #[test]
+    fn third_party_and_typed_rules_match() {
+        let rules = "! t\n||tp.example^$third-party\n||js.example^$script\n||x.example^$image,third-party\n@@||ok.tp.example^$third-party\n";
+        let h = create(rules.as_bytes());
+        assert!(should_block(h, "tp.example"));
+        assert!(should_block(h, "a.tp.example"));
+        assert!(should_block(h, "js.example"));
+        assert!(should_block(h, "x.example"));
+        assert!(!should_block(h, "ok.tp.example"));
+        assert!(!should_block(h, "unlisted.example"));
         destroy(h);
     }
 
