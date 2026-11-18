@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.ShieldVpn" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/sv_primary</item>
+        <item name="colorPrimaryDark">@color/sv_surface</item>
+        <item name="colorOnPrimary">@color/sv_on_primary</item>
+        <item name="colorSecondary">@color/sv_primary</item>
+        <item name="colorOnSecondary">@color/sv_on_primary</item>
+        <item name="colorSurface">@color/sv_surface</item>
+        <item name="colorOnSurface">@color/sv_on_surface</item>
+        <item name="colorError">@color/sv_error</item>
+        <item name="android:colorBackground">@color/sv_surface</item>
+        <item name="colorAccent">@color/sv_primary</item>
+        <item name="android:textColorPrimary">@color/sv_on_surface</item>
+        <item name="android:textColorSecondary">@color/sv_on_surface_variant</item>
+        <item name="android:windowBackground">@color/sv_surface</item>
+        <item name="android:statusBarColor">@color/sv_surface</item>
+        <item name="android:navigationBarColor">@color/sv_surface_container</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="Theme.ShieldVpn" parent="Base.Theme.ShieldVpn" />
+</resources>

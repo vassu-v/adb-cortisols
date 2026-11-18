@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Sv.Page"
+    android:visibility="gone">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+        <TextView android:text="Settings" android:textAppearance="@style/TextAppearance.Sv.HeadlineSmall"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <LinearLayout style="@style/Sv.Card" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+            <TextView android:text="Upstream DNS" android:textAppearance="@style/TextAppearance.Sv.TitleMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:text="Allowed queries are forwarded here. Blocked ones are answered on the device."
+                android:layout_marginTop="2dp" android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioGroup android:id="@+id/dns_group" android:layout_marginTop="8dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+                <RadioButton android:id="@+id/rb_cf" android:text="1.1.1.1  Cloudflare"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <RadioButton android:id="@+id/rb_q9" android:text="9.9.9.9  Quad9"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <RadioButton android:id="@+id/rb_custom" android:text="Custom IPv4 address"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+            </RadioGroup>
+            <EditText android:id="@+id/et_custom" android:hint="e.g. 94.140.14.14"
+                android:inputType="phone" android:digits="0123456789."
+                android:maxLength="15" android:singleLine="true"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_save"
+                style="@style/Sv.Button" android:text="Save"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/Sv.Card" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <TextView android:text="Private DNS" android:textAppearance="@style/TextAppearance.Sv.TitleMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:id="@+id/tv_private_dns" android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/Sv.Card" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <TextView android:text="Privacy" android:textAppearance="@style/TextAppearance.Sv.TitleMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:text="No analytics. The only network traffic is list downloads and your chosen upstream DNS. Counters hold numbers only, never domain names."
+                android:layout_marginTop="4dp" android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
