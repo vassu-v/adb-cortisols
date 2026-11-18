@@ -1,0 +1,16 @@
+# Rust
+**/target/
+# Gradle / Android
+.gradle/
+**/build/
+local.properties
+*.apk
+*.aab
+.idea/
+*.iml
+# Native libs are built from core/ (see scripts/build-core.sh)
+shieldvpn/app/src/main/jniLibs/
+# Signing material must never be committed
+*.jks
+*.keystore
+keystore.properties

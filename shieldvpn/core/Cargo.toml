@@ -1,0 +1,22 @@
+[package]
+name = "shieldcore"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "shieldcore"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# No cosmetic/resource features; Send+Sync Engine (default "single-thread" off).
+adblock = { version = "0.13.6", default-features = false, features = ["embedded-domain-resolver", "full-regex-handling"] }
+jni = "0.21.1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+# panic must stay "unwind": FFI entry points rely on catch_unwind.
+panic = "unwind"

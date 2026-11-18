@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sv_surface">#14130F</color>
+    <color name="sv_surface_container_low">#1C1B16</color>
+    <color name="sv_surface_container">#211F1A</color>
+    <color name="sv_surface_container_high">#2B2924</color>
+    <color name="sv_on_surface">#E6E2D8</color>
+    <color name="sv_on_surface_variant">#CBC6B6</color>
+    <color name="sv_outline">#948F80</color>
+    <color name="sv_outline_variant">#484539</color>
+    <color name="sv_primary">#7FD1B0</color>
+    <color name="sv_on_primary">#00382A</color>
+    <color name="sv_primary_container">#00513D</color>
+    <color name="sv_on_primary_container">#BFEBD7</color>
+    <color name="sv_tertiary">#F0BC5E</color>
+    <color name="sv_error">#F2B8B5</color>
+</resources>

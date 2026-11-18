@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Sv.Page"
+    android:visibility="gone">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+        <TextView android:text="Activity" android:textAppearance="@style/TextAppearance.Sv.HeadlineSmall"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <TextView android:text="Counts only. ShieldVPN never records which domains were looked up."
+            android:layout_marginTop="4dp" android:layout_marginBottom="16dp"
+            android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <LinearLayout style="@style/Sv.Card" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:text="Blocked per hour, last 24 hours"
+                android:textAppearance="@style/TextAppearance.Sv.LabelMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <app.shieldvpn.BarChartView android:id="@+id/chart"
+                android:layout_width="match_parent" android:layout_height="190dp"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/Sv.Card" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <TextView android:text="Last 24 hours" android:textAppearance="@style/TextAppearance.Sv.LabelMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:id="@+id/act_24h" android:text="0" android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.Sv.HeadlineMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <View style="@style/Sv.Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+            <TextView android:text="Busiest hour" android:textAppearance="@style/TextAppearance.Sv.LabelMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:id="@+id/act_peak" android:text="-" android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.Sv.TitleLarge"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <View style="@style/Sv.Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+            <TextView android:text="Since install or last reset" android:textAppearance="@style/TextAppearance.Sv.LabelMedium"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView android:id="@+id/act_total" android:text="0" android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.Sv.TitleLarge"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_reset"
+            style="@style/Sv.Button.Tonal" android:text="Reset counters"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

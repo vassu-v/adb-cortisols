@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Sv.Page"
+    android:visibility="gone">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+        <TextView android:text="Filter lists" android:textAppearance="@style/TextAppearance.Sv.HeadlineSmall"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <TextView android:text="Lists are downloaded over HTTPS and stored only on this device. Domains are matched on-device."
+            android:layout_marginTop="4dp" android:layout_marginBottom="16dp"
+            android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <LinearLayout android:id="@+id/list_container" style="@style/Sv.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:paddingTop="4dp" android:paddingBottom="4dp" />
+
+        <ProgressBar android:id="@+id/list_progress" style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:visibility="gone"
+            android:progressTint="@color/sv_primary" />
+        <TextView android:id="@+id/list_progress_text"
+            android:layout_marginTop="6dp" android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.Sv.BodyMedium"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_update"
+            style="@style/Sv.Button" android:text="Update all lists"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>
